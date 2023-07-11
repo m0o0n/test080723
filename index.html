@@ -13,18 +13,16 @@
             align-items: center;
             height: 100px;
         }
-        .for_swaped div {
+        .active {
             background: aqua;
         }
     </style>
 </head>
 <body>
-    <div class="for_swaped"></div>
-    
+     
 </body>
 <script>
     let elms = []
-    const forSwaped = document.querySelector('.for_swaped')
     for (let i = 0; i < 100; i++) {
         const div = document.createElement('div')
         div.innerHTML = `div${i+1}`
@@ -33,17 +31,18 @@
         div.classList.add('ordered__div')
         div.style.height = '100px'
         elms.push(div)
-        div.addEventListener('click', (e)=>{
-
+        div.addEventListener('click', (e)=> {
             const indexOf = elms.indexOf(e.currentTarget)
             const existedIndex = Number(e.currentTarget.getAttribute('index'))
             const swaped = e.currentTarget.getAttribute("swaped") === 'false' ? false : true
             if(swaped) {
-                forSwaped.removeChild(e.currentTarget)
-                elms.splice(existedIndex, 1, e.currentTarget)  
+                elms.splice(indexOf, 1)  
+                elms.splice(existedIndex, 0, e.currentTarget)
+                e.currentTarget.classList.remove('active')
             } else {
-                elms.splice(indexOf, 1, '')
-                forSwaped.prepend(e.currentTarget)
+                elms.splice(indexOf, 1)
+                elms.splice(0, 0, e.currentTarget)
+                e.currentTarget.classList.add('active')
             }
             e.currentTarget.setAttribute('swaped', !swaped)
             document.body.append(...elms)
