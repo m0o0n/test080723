@@ -19,10 +19,12 @@
     </style>
 </head>
 <body>
-     
+        
+    
 </body>
 <script>
     let elms = []
+    const forSwaped = document.querySelector('.for_swaped')
     for (let i = 0; i < 100; i++) {
         const div = document.createElement('div')
         div.innerHTML = `div${i+1}`
@@ -31,23 +33,51 @@
         div.classList.add('ordered__div')
         div.style.height = '100px'
         elms.push(div)
-        div.addEventListener('click', (e)=> {
+        
+
+        div.addEventListener('click', (e)=>{
             const indexOf = elms.indexOf(e.currentTarget)
             const existedIndex = Number(e.currentTarget.getAttribute('index'))
-            const swaped = e.currentTarget.getAttribute("swaped") === 'false' ? false : true
-            if(swaped) {
-                elms.splice(indexOf, 1)  
-                elms.splice(existedIndex, 0, e.currentTarget)
+            const setIsSwaped = e.currentTarget.getAttribute("swaped") === 'false' ? false : true
+            
+            if(setIsSwaped) {
+                elms.splice(indexOf, 1)
+                elms.splice(existedIndex, 0, e.currentTarget)  
                 e.currentTarget.classList.remove('active')
+                e.currentTarget.setAttribute('swaped', !setIsSwaped)
             } else {
                 elms.splice(indexOf, 1)
-                elms.splice(0, 0, e.currentTarget)
+                elms.unshift(e.currentTarget)
                 e.currentTarget.classList.add('active')
+                e.currentTarget.setAttribute('swaped', !setIsSwaped)
+                elms.forEach((el)=>{
+                    const isSwaped = el.getAttribute('swaped')
+                    const existedIndexOfIteration = Number(el.getAttribute('index'))
+                    const indexOfIteration = elms.indexOf(el)
+                    if(isSwaped === 'false' && existedIndexOfIteration !== indexOfIteration){
+                        elms.splice(indexOfIteration, 1)
+                        elms.splice(existedIndexOfIteration, 0, el)
+                    }
+                })
             }
-            e.currentTarget.setAttribute('swaped', !swaped)
+            
             document.body.append(...elms)
         })
     }
     document.body.append(...elms)
 </script>
 </html>
+
+
+
+<!-- console.log(
+    elms.sort((a,b)=>{
+        const swapedA = a.getAttribute('swaped')
+        const swapedB = b.getAttribute('swaped')
+        const indexOfA = Number(a.getAttribute('index'))
+        const indexOfB = Number(b.getAttribute('index'))
+        if((swapedA !== 'false' && swapedB === 'false') || (swapedA === 'false' && swapedB !== 'false') || (swapedA !== 'false' && swapedB !== 'false')){
+           return indexOfA - indexOfB
+        }
+    })
+   )  -->
