@@ -45,6 +45,15 @@
                 elms.splice(existedIndex, 0, e.currentTarget)  
                 e.currentTarget.classList.remove('active')
                 e.currentTarget.setAttribute('swaped', !setIsSwaped)
+                elms.forEach((el)=>{
+                    const isSwaped = el.getAttribute('swaped')
+                    const existedIndexOfIteration = Number(el.getAttribute('index'))
+                    const indexOfIteration = elms.indexOf(el)
+                    if(isSwaped === 'false' && existedIndexOfIteration !== indexOfIteration){
+                        elms.splice(indexOfIteration, 1)
+                        elms.splice(existedIndexOfIteration, 0, el)
+                    }
+                })
             } else {
                 elms.splice(indexOf, 1)
                 elms.unshift(e.currentTarget)
